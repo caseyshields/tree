@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> Network Diagram Demo </title>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="tree.js"></script>
+</head>
+
+<style>
+    .node { fill:grey; stroke:darkgrey; }
+    .edge { fill:none; stroke:grey; }
+</style>
+
+<body>
+    <svg height="300" width="900"></svg>
+</body>
+
+<script>
+    let svg = d3.select('svg');
+    let config = {
+        base_radius : 20,
+        cluster : false,
+        size : [300, 800]
+    }
+    let nodes = [
+        { id:"c1", class:"control", parent: "" },
+
+        { id:"r1", class:"router", parent : "c1" },
+        { id:"r2", class:"router", parent : "c1" },
+
+        { id:"s1", class:"sensor", parent : "r1" },
+        { id:"s2", class:"sensor", parent : "r1" },
+        { id:"r4", class:"router", parent : "r1" },
+        { id:"c2", class:"control", parent : "r2" },
+        
+        { id:"c3", class:"control", parent : "r4" },
+        { id:"r3", class:"router", parent : "c2" },
+        { id:"s3", class:"sensor", parent : "c2" },
+
+        { id:"s4", class:"sensor", parent : "r3" },
+        { id:"s5", class:"sensor", parent : "r3" }
+    ];
+    let edges = [ // in addition to the parent links...
+        { id:"a", class:"graph", source:"c2", target:"hq" },
+        { id:"b", class:"cycle", source:"r1", target:"r4" },
+        { id:"c", class:"cycle", source:"r4", target:"c1" }
+    ];
+
+    let tree = Tree( svg, config, nodes, edges )
+        .click( (node)=>{console.log(node);} )
+        //.area( (link)=>{} )
+        //.filter( (node)=>{} )
+        ();
+</script>
+
+</html>
